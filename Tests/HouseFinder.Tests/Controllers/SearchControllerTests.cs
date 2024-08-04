@@ -1,7 +1,6 @@
 using HouseFinder.Engine.Controllers;
 using HouseFinder.Engine.Pages;
 using HouseFinder.Engine.Shared;
-using Microsoft.Playwright;
 using TestingSupport.PlaywrightCommon.Helpers;
 using TestingSupport.PlaywrightCommon.Shared;
 
@@ -11,6 +10,7 @@ namespace HouseFinder.Tests.Controllers;
 public class SearchControllerTests
 {
     private IPage _page;
+    private SearchRequest _searchRequest;
     private SearchController _searchController;
     private string _area;
 
@@ -23,10 +23,15 @@ public class SearchControllerTests
             Headless = false,
             DefaultTimeoutMs = 30000
         });
-        _searchController = new SearchController(_page, new SearchRequest
+
+        _searchRequest = new SearchRequest
         {
-            Area = _area
-        });
+            Area = _area,
+            MinimumPrice = 200_000,
+            MaximumPrice = 450_000,
+        };
+
+        _searchController = new SearchController(_page, _searchRequest);
     }
 
     [SetUp]
@@ -50,5 +55,14 @@ public class SearchControllerTests
         await _searchController.SetRadiusAsync();
         
         Assert.That(_page.Url.Contains("radius=2.0"), "Page should contain radius=2");
+    }
+
+    [Test]
+    public async Task SetPrice_SetsCorrectPrice()
+    {
+        await _searchController.SetPriceAsync();
+
+        Assert.That(_page.Url.Contains($"min-price={_searchRequest.MinimumPrice}"), "Page should contain min-price to be set to the value of the search request.");
+        Assert.That(_page.Url.Contains($"max-price={_searchRequest.MaximumPrice}"), "Page should contain max-price to be set to the value of the search request.");
     }
 }

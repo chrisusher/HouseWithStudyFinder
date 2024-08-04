@@ -8,7 +8,7 @@ public class OnTheMarketPage
         Page = page;
     }
 
-    public IPage Page { get; }
+    protected IPage Page { get; }
 
     public virtual Task NavigateAsync() => Task.CompletedTask;
 

@@ -1,3 +1,5 @@
+using HouseFinder.Engine.Pages.Dialogs;
+
 namespace HouseFinder.Engine.Pages;
 
 public class SearchResultPage : OnTheMarketPage
@@ -6,13 +8,13 @@ public class SearchResultPage : OnTheMarketPage
     {        
     }
 
-    public ILocator BedsButton => Page.GetByRole(AriaRole.Button)
-                                    .GetByText("Beds");
+    public ILocator MoreFiltersButton => Page.GetByLabel("change more filters");
 
-    public ILocator PriceButton => Page.GetByRole(AriaRole.Button)
-                                    .GetByText("Price");
+    public ILocator PriceButton => Page.GetByLabel("Price");
 
     public ILocator RadiusButton => Page.GetByLabel("Radius");
+
+    public SetPriceDialog PriceDialog => new(Page);
 
     public override bool OnPage()
     {
