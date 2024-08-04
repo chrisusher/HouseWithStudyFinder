@@ -37,6 +37,31 @@ public class SearchController : BaseController
         await _page.ClickAsync(HomePage.SearchButton.Locator);
     }
 
+    public async Task SetBedsAsync()
+    {
+        var minBedsLocator = ResultPage.MoreFiltersDialog.MinBedsSelector;
+
+        await RetryPolicy.ExecuteAsync(async () =>
+        {
+            if (await _page.IsVisibleAsync(minBedsLocator.Locator))
+            {
+                return;
+            }
+
+            await ResultPage.MoreFiltersButton.ClickAsync();
+
+            if (!await _page.IsVisibleAsync(minBedsLocator.Locator))
+            {
+                throw new Exception("Min Beds selector not visible");
+            }
+        });
+
+        await _page.SelectOptionAsync(minBedsLocator.Locator, _searchRequest.NumberOfBedrooms.ToString());
+
+        await ResultPage.MoreFiltersDialog.ApplyButton.ClickAsync();
+        await _page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+    }
+
     public async Task SetRadiusAsync()
     {
         var radiusLocator = By.Id("radius-selector");

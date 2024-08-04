@@ -29,6 +29,7 @@ public class SearchControllerTests
             Area = _area,
             MinimumPrice = 200_000,
             MaximumPrice = 450_000,
+            NumberOfBedrooms = 3
         };
 
         _searchController = new SearchController(_page, _searchRequest);
@@ -47,6 +48,14 @@ public class SearchControllerTests
         
         Assert.That(resultPage.OnPage, Is.True, "Page should be on result page");
         Assert.That(_page.Url.Contains(_area.ToLower()), "Page should contain searched area");
+    }
+
+    [Test]
+    public async Task SetBeds_SetsCorrectBeds()
+    {
+        await _searchController.SetBedsAsync();
+
+        Assert.That(_page.Url.Contains($"min-bedrooms={_searchRequest.NumberOfBedrooms}"), "Page should contain min-bedrooms to be set to the value of the search request.");
     }
 
     [Test]

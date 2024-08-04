@@ -10,11 +10,13 @@ public class SearchResultPage : OnTheMarketPage
 
     public ILocator MoreFiltersButton => Page.GetByLabel("change more filters");
 
+    public MoreFiltersDialog MoreFiltersDialog => new(Page);
+
     public ILocator PriceButton => Page.GetByLabel("Price");
 
-    public ILocator RadiusButton => Page.GetByLabel("Radius");
-
     public SetPriceDialog PriceDialog => new(Page);
+
+    public ILocator RadiusButton => Page.GetByLabel("Radius");
 
     public override bool OnPage()
     {
