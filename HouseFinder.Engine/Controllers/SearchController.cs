@@ -10,7 +10,7 @@ public class SearchController : BaseController
     private readonly HomePage _homePage;
     private readonly SearchRequest _searchRequest;
 
-    private SearchResultPage ResultPage => new(_page);
+    public SearchResultPage ResultPage => new(_page);
 
     public SearchController(IPage page, SearchRequest searchRequest)
     {

@@ -57,4 +57,15 @@ public class SearchResultPageTests
         Assert.That(heading, Is.Not.Null, "Heading should not be null.");
         Assert.That(heading.Contains("£"), "Heading should contain '£'.");
     }
+
+    [Test]
+    public async Task Property_HasTags()
+    {
+        var tags = await _propertyPage.TagLocator.AllTextContentsAsync();
+
+        LoggingHelper.Log($"Tags: {string.Join(", ", tags)}");
+
+        Assert.That(tags, Is.Not.Null, "Tags should not be null.");
+        Assert.That(tags, Has.Count.AtLeast(1), "Tags should contain at least one.");
+    }
 }
