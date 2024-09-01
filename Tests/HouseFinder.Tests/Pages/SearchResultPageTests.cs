@@ -33,7 +33,7 @@ public class SearchResultPageTests
         LoggingHelper.Log($"Heading: {heading}");
 
         Assert.That(heading, Is.Not.Null, "Heading should not be null.");
-        Assert.That(heading.Contains("3 bedroom semi"), "Heading should contain '3 bedroom semi'.");
+        Assert.That(heading, Does.Contain("3 bedroom semi"), "Heading should contain '3 bedroom semi'.");
     }
 
     [Test]
@@ -44,7 +44,7 @@ public class SearchResultPageTests
         LoggingHelper.Log($"Heading: {heading}");
 
         Assert.That(heading, Is.Not.Null, "Heading should not be null.");
-        Assert.That(heading.Contains("Swansea"), "Heading should contain 'Swansea'.");
+        Assert.That(heading, Does.Contain("Swansea"), "Heading should contain 'Swansea'.");
     }
 
     [Test]
@@ -55,7 +55,7 @@ public class SearchResultPageTests
         LoggingHelper.Log($"Heading: {heading}");
 
         Assert.That(heading, Is.Not.Null, "Heading should not be null.");
-        Assert.That(heading.Contains("£"), "Heading should contain '£'.");
+        Assert.That(heading, Does.Contain("£"), "Heading should contain '£'.");
     }
 
     [Test]

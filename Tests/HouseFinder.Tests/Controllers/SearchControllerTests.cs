@@ -47,7 +47,7 @@ public class SearchControllerTests
         var resultPage = new SearchResultPage(_page);
         
         Assert.That(resultPage.OnPage, Is.True, "Page should be on result page");
-        Assert.That(_page.Url.Contains(_area.ToLower()), "Page should contain searched area");
+        Assert.That(_page.Url.Contains(_area, StringComparison.CurrentCultureIgnoreCase), "Page should contain searched area");
     }
 
     [Test]
@@ -55,7 +55,7 @@ public class SearchControllerTests
     {
         await _searchController.SetBedsAsync();
 
-        Assert.That(_page.Url.Contains($"min-bedrooms={_searchRequest.NumberOfBedrooms}"), "Page should contain min-bedrooms to be set to the value of the search request.");
+        Assert.That(_page.Url, Does.Contain($"min-bedrooms={_searchRequest.NumberOfBedrooms}"), "Page should contain min-bedrooms to be set to the value of the search request.");
     }
 
     [Test]
@@ -63,7 +63,7 @@ public class SearchControllerTests
     {
         await _searchController.SetRadiusAsync();
         
-        Assert.That(_page.Url.Contains("radius=2.0"), "Page should contain radius=2");
+        Assert.That(_page.Url, Does.Contain("radius=2.0"), "Page should contain radius=2");
     }
 
     [Test]
@@ -71,7 +71,7 @@ public class SearchControllerTests
     {
         await _searchController.SetPriceAsync();
 
-        Assert.That(_page.Url.Contains($"min-price={_searchRequest.MinimumPrice}"), "Page should contain min-price to be set to the value of the search request.");
+        Assert.That(_page.Url, Does.Contain($"min-price={_searchRequest.MinimumPrice}"), "Page should contain min-price to be set to the value of the search request.");
         Assert.That(_page.Url.Contains($"max-price={_searchRequest.MaximumPrice}"), "Page should contain max-price to be set to the value of the search request.");
     }
 }

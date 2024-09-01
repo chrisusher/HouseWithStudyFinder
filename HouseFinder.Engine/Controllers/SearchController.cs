@@ -9,6 +9,7 @@ public class SearchController : BaseController
     private readonly IPage _page;
     private readonly HomePage _homePage;
     private readonly SearchRequest _searchRequest;
+    private bool _cookiesDismissed;
 
     public SearchResultPage ResultPage => new(_page);
 
@@ -22,19 +23,28 @@ public class SearchController : BaseController
 
     public async Task PerformSearchAsync()
     {
-        if (!_homePage.OnPage())
-        {
-            await _homePage.NavigateAsync();
-        }
+        await _page.GotoAsync($"https://www.onthemarket.com/for-sale/property/{_searchRequest.Area.ToLower()}/?view=map-list");
+
+        // await Task.Delay(2000);
+
+        // if (!_homePage.OnPage())
+        // {
+        //     await _homePage.NavigateAsync();
+        // }
 
         // Accept cookies
-        await _page.GetByRole(AriaRole.Button)
-            .GetByText("Accept all")
-            .ClickAsync();
+        if (!_cookiesDismissed)
+        {
+            await _page.GetByRole(AriaRole.Button)
+                                    .GetByText("Accept all")
+                                    .ClickAsync();
 
-        await _page.FillAsync(HomePage.SearchBox.Locator, _searchRequest.Area);
+            _cookiesDismissed = true;
+        }
 
-        await _page.ClickAsync(HomePage.SearchButton.Locator);
+        // await _page.FillAsync(HomePage.SearchBox.Locator, _searchRequest.Area);
+
+        // await _page.ClickAsync(HomePage.SearchButton.Locator);
     }
 
     public async Task SetBedsAsync()

@@ -3,6 +3,29 @@ namespace HouseFinder.Engine.Shared;
 public class Property
 {
     private int _numberOfBedrooms;
+    private long _id;
+
+    public long Id
+    {
+        get
+        {
+            if (_id > 0)
+            {
+                return _id;
+            }
+
+            if(string.IsNullOrEmpty(Url))
+            {
+                return _id;
+            }
+
+            return long.Parse(Url.Split('/').Last(x => !string.IsNullOrEmpty(x)));
+        }
+        set
+        {
+            _id = value;
+        }
+    }
 
     public string Heading { get; set; } = string.Empty;
 
