@@ -1,5 +1,6 @@
 using System.Text.Json;
 using HouseFinder.Engine.Engines;
+using HouseFinder.Engine.Enums;
 using HouseFinder.Engine.Shared;
 using Microsoft.Playwright;
 using TestingSupport.PlaywrightCommon.Helpers;
@@ -19,19 +20,19 @@ public class Program
     {
         _area = "Sketty";
 
-
         _page = await BrowserManager.LaunchBrowserAsync(new BrowserConfig
         {
-            Headless = false,
+            Headless = true,
             DefaultTimeoutMs = 30000
         });
 
         _searchRequest = new SearchRequest
         {
             Area = _area,
-            MinimumPrice = 200_000,
+            MinimumPrice = 250_000,
             MaximumPrice = 450_000,
-            NumberOfBedrooms = 3
+            NumberOfBedrooms = 3,
+            Radius = RadiusType.TwoMiles,
         };
 
         try

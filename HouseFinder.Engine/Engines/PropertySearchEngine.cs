@@ -31,6 +31,7 @@ public class PropertySearchEngine
         await _searchController.PerformSearchAsync();
         await _searchController.SetPriceAsync();
         await _searchController.SetBedsAsync();
+        await _searchController.SetRadiusAsync();
 
         var hasMorePages = await _searchController.ResultPage.NextPageButton.IsEnabledAsync();
 
@@ -73,7 +74,7 @@ public class PropertySearchEngine
             .Properties
             .GroupBy(x => x.Id)
             .Select(x => x.First())
-            .OrderBy(x => x.ListPrice)
+            .OrderByDescending(x => x.Id)
             .ToList();
         
         return properties;
