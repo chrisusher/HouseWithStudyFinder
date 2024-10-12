@@ -6,6 +6,8 @@ public class PropertyPage : OnTheMarketPage
     {
     }
 
+    public ILocator MetadataLocator => Page.Locator(".mr-6");
+
     public string MainSectionLocator => ".main-col";
 
     public ILocator HeadingLocator => Page.Locator($"{MainSectionLocator} {By.TagName("h1").Locator}");

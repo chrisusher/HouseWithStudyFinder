@@ -14,7 +14,7 @@ public class Property
                 return _id;
             }
 
-            if(string.IsNullOrEmpty(Url))
+            if (string.IsNullOrEmpty(Url))
             {
                 return _id;
             }
@@ -58,6 +58,8 @@ public class Property
     }
 
     public int ListPrice { get; set; }
+
+    public int? FloorSpaceSqFt { get; set; }
 
     public List<string> Tags { get; set; } = new();
 }

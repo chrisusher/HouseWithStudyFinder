@@ -1,5 +1,6 @@
 using HouseFinder.Engine.Controllers;
 using HouseFinder.Engine.Pages;
+using HouseFinder.Engine.Parsers;
 using HouseFinder.Engine.Shared;
 using Polly;
 using TestingSupport.Common.Utilities;
@@ -9,11 +10,13 @@ namespace HouseFinder.Engine.Engines;
 public class PropertySearchEngine
 {
     private readonly IPage _page;
+    private readonly SearchRequest _searchRequest;
     private SearchController _searchController;
 
     public PropertySearchEngine(IPage page, SearchRequest searchRequest)
     {
         _page = page;
+        _searchRequest = searchRequest;
         _searchController = new SearchController(page, searchRequest);
     }
 
@@ -74,9 +77,25 @@ public class PropertySearchEngine
             .Properties
             .GroupBy(x => x.Id)
             .Select(x => x.First())
+            .Where(x =>
+            {
+                if (x.FloorSpaceSqFt is null)
+                {
+                    return true;
+                }
+                if (_searchRequest.MinSquareFeet is null)
+                {
+                    return true;
+                }
+                if (x.FloorSpaceSqFt > _searchRequest.MinSquareFeet)
+                {
+                    return true;
+                }
+                return false;
+            })
             .OrderByDescending(x => x.Id)
             .ToList();
-        
+
         return properties;
     }
 
@@ -141,6 +160,25 @@ public class PropertySearchEngine
             var tags = await propertyPage.TagLocator.AllTextContentsAsync();
 
             property.Tags = tags.ToList();
+
+            var metadata = await propertyPage.MetadataLocator.AllAsync();
+
+            foreach (var data in metadata)
+            {
+                text = await data.TextContentAsync();
+
+                if (string.IsNullOrEmpty(text))
+                {
+                    continue;
+                }
+
+                if (!text.Contains("sq ft"))
+                {
+                    continue;
+                }
+
+                property.FloorSpaceSqFt = FloorSpaceParser.Parse(text);
+            }
 
             return property;
         }

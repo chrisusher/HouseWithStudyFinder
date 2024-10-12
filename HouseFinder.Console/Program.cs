@@ -33,6 +33,7 @@ public class Program
             MaximumPrice = 450_000,
             NumberOfBedrooms = 3,
             Radius = RadiusType.TwoMiles,
+            MinSquareFeet = 1200,
         };
 
         try
