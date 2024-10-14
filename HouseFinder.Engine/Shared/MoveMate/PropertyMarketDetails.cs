@@ -1,12 +1,13 @@
-using HouseFinder.Engine.Shared.MoveMate;
+using System.Text.Json.Serialization;
 
-namespace HouseFinder.Engine.Shared;
+namespace HouseFinder.Engine.Shared.MoveMate;
 
-public class Property
+public class PropertyMarketDetails
 {
     private int _numberOfBedrooms;
     private long _id;
 
+    [JsonPropertyName("id")]
     public long Id
     {
         get
@@ -29,12 +30,16 @@ public class Property
         }
     }
 
+    [JsonPropertyName("heading")]
     public string Heading { get; set; } = string.Empty;
 
+    [JsonPropertyName("subHeading")]
     public string SubHeading { get; set; } = string.Empty;
 
+    [JsonPropertyName("url")]
     public string Url { get; set; } = string.Empty;
 
+    [JsonPropertyName("numberOfBedrooms")]
     public int NumberOfBedrooms
     {
         get
@@ -59,23 +64,12 @@ public class Property
         }
     }
 
+    [JsonPropertyName("listPrice")]
     public int ListPrice { get; set; }
 
+    [JsonPropertyName("floorSpaceSqFt")]
     public int? FloorSpaceSqFt { get; set; }
 
+    [JsonPropertyName("tags")]
     public List<string> Tags { get; set; } = new();
-
-    public PropertyMarketDetails ToMarketDetails()
-    {
-        return new PropertyMarketDetails
-        {
-            Id = Id,
-            Heading = Heading,
-            SubHeading = SubHeading,
-            Url = Url,
-            ListPrice = ListPrice,
-            FloorSpaceSqFt = FloorSpaceSqFt,
-            Tags = Tags,
-        };
-    }
 }

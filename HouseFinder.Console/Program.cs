@@ -2,6 +2,8 @@ using System.Text.Json;
 using HouseFinder.Engine.Engines;
 using HouseFinder.Engine.Enums;
 using HouseFinder.Engine.Shared;
+using HouseFinder.Engine.Shared.Config;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Playwright;
 using TestingSupport.PlaywrightCommon.Helpers;
 using TestingSupport.PlaywrightCommon.Shared;
@@ -36,9 +38,14 @@ public class Program
             MinSquareFeet = 1200,
         };
 
+        var config = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json")
+            .Build()
+            .Get<MoveMateConfig>();
+
         try
         {
-            _propertySearchEngine = new PropertySearchEngine(_page, _searchRequest);
+            _propertySearchEngine = new PropertySearchEngine(_page, _searchRequest, config);
 
             var properties = await _propertySearchEngine.GetAllPropertiesAsync();
 

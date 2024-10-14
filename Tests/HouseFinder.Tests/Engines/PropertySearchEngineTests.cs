@@ -1,5 +1,6 @@
 using HouseFinder.Engine.Engines;
 using HouseFinder.Engine.Shared;
+using HouseFinder.Engine.Shared.Config;
 using TestingSupport.PlaywrightCommon.Helpers;
 using TestingSupport.PlaywrightCommon.Shared;
 
@@ -31,7 +32,11 @@ public class PropertySearchEngineTests
             NumberOfBedrooms = 3
         };
 
-        _propertySearchEngine = new PropertySearchEngine(_page, _searchRequest);
+        _propertySearchEngine = new PropertySearchEngine(_page, _searchRequest, new MoveMateConfig
+        {
+            BaseUrl = "https://movemate-test.azurewebsites.net/api/",
+            AccountId = Guid.NewGuid()
+        });
     }
 
     [Test]

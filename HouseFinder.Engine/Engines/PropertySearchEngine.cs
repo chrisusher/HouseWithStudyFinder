@@ -2,6 +2,8 @@ using HouseFinder.Engine.Controllers;
 using HouseFinder.Engine.Pages;
 using HouseFinder.Engine.Parsers;
 using HouseFinder.Engine.Shared;
+using HouseFinder.Engine.Shared.Config;
+using HouseFinder.Engine.Clients;
 using Polly;
 using TestingSupport.Common.Utilities;
 
@@ -12,12 +14,14 @@ public class PropertySearchEngine
     private readonly IPage _page;
     private readonly SearchRequest _searchRequest;
     private SearchController _searchController;
+    private readonly MoveMateClient _moveMateClient;
 
-    public PropertySearchEngine(IPage page, SearchRequest searchRequest)
+    public PropertySearchEngine(IPage page, SearchRequest searchRequest, MoveMateConfig moveMateConfig)
     {
         _page = page;
         _searchRequest = searchRequest;
         _searchController = new SearchController(page, searchRequest);
+        _moveMateClient = new MoveMateClient(moveMateConfig);
     }
 
     public async Task<GetPropertySearchResult> GetPropertiesWithStudyAsync()
@@ -117,13 +121,6 @@ public class PropertySearchEngine
                 {
                     Timeout = 2000,
                 });
-
-            // var link = await Policy.Handle<Exception>()
-            //     .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)))
-            //     .ExecuteAsync(async () => await result
-            //         .GetByRole(AriaRole.Link)
-            //         .First
-            //         .GetAttributeAsync("href"));
 
             if (string.IsNullOrEmpty(link))
             {
