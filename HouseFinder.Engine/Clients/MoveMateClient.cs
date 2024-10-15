@@ -28,7 +28,7 @@ public class MoveMateClient
             }
         }
 
-        return properties;
+        return newProperties;
     }
 
     private async Task<bool> UploadPropertyAsync(Property property)

@@ -28,7 +28,17 @@ public class PropertySearchEngine
     {
         var properties = await GetAllPropertiesAsync();
 
-        return new GetPropertySearchResult();
+        var propertiesWithStudy = properties.Properties
+            .Where(x => x != null &&
+                        x.Tags.Any(y => y.Contains("Study", StringComparison.OrdinalIgnoreCase)))
+                        .ToList();
+
+        var newProperties = await _moveMateClient.UploadPropertiesAsync(propertiesWithStudy);
+
+        return new GetPropertySearchResult
+        {
+            Properties = newProperties
+        };
     }
 
     public async Task<GetPropertySearchResult> GetAllPropertiesAsync()

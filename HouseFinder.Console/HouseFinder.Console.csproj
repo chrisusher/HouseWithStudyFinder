@@ -14,4 +14,8 @@
     <PackageReference Include="TestingSupport.PlaywrightCommon.Helpers" Version="1.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>

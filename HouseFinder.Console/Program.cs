@@ -39,19 +39,16 @@ public class Program
         };
 
         var config = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json")
+            .AddJsonFile("appsettings.json", false)
             .Build()
+            .GetSection("MoveMate")
             .Get<MoveMateConfig>();
 
         try
         {
             _propertySearchEngine = new PropertySearchEngine(_page, _searchRequest, config);
 
-            var properties = await _propertySearchEngine.GetAllPropertiesAsync();
-
-            var propertiesWithStudy = properties.Properties.Where(x => x != null &&
-                x.Tags
-                    .Any(y => y.Contains("Study", StringComparison.OrdinalIgnoreCase)));
+            var propertiesWithStudy = await _propertySearchEngine.GetPropertiesWithStudyAsync();
 
             await File.WriteAllTextAsync($".\\Properties-Study-{_area}-{DateTime.Now:yyyy-MM-dd-HH-mm-ss}.json", JsonSerializer.Serialize(propertiesWithStudy, JsonSerialiserOptions.JsonOptions));
         }
