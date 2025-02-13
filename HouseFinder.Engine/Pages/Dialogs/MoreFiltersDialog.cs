@@ -12,5 +12,5 @@ public class MoreFiltersDialog : OnTheMarketDialog
                                         Exact = false
                                     });
 
-    public By MinBedsSelector => By.Id("min-bedrooms");
+    public ILocator MinBedsSelector => Root.Locator("#min-bedrooms");
 }

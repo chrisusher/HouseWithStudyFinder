@@ -21,7 +21,14 @@ public class SearchControllerTests
         _page = await BrowserManager.LaunchBrowserAsync(new BrowserConfig
         {
             Headless = false,
-            DefaultTimeoutMs = 30000
+            DefaultTimeoutMs = 10000
+        });
+
+        await _page.Context.Tracing.StartAsync(new()
+        {
+            Screenshots = true,
+            Snapshots = true,
+            Sources = true
         });
 
         _searchRequest = new SearchRequest
@@ -33,6 +40,15 @@ public class SearchControllerTests
         };
 
         _searchController = new SearchController(_page, _searchRequest);
+    }
+
+    [OneTimeTearDown]
+    public async Task ClassTearDown()
+    {
+        await _page.Context.Tracing.StopAsync(new TracingStopOptions
+        {
+            Path = $"{LoggingHelper.LogDirectory}/trace.zip"
+        });
     }
 
     [SetUp]
@@ -55,7 +71,10 @@ public class SearchControllerTests
     {
         await _searchController.SetBedsAsync();
 
-        Assert.That(_page.Url, Does.Contain($"min-bedrooms={_searchRequest.NumberOfBedrooms}"), "Page should contain min-bedrooms to be set to the value of the search request.");
+        // Shouldn't be required but the url does not change until a delay.
+        await Task.Delay(3000);
+
+        Assert.That(_searchController.Page.Url, Does.Contain($"min-bedrooms={_searchRequest.NumberOfBedrooms}"), "Page should contain min-bedrooms to be set to the value of the search request.");
     }
 
     [Test]
@@ -63,7 +82,7 @@ public class SearchControllerTests
     {
         await _searchController.SetRadiusAsync();
         
-        Assert.That(_page.Url, Does.Contain("radius=2.0"), "Page should contain radius=2");
+        Assert.That(_searchController.Page.Url, Does.Contain("radius=2.0"), "Page should contain radius=2");
     }
 
     [Test]
@@ -71,7 +90,9 @@ public class SearchControllerTests
     {
         await _searchController.SetPriceAsync();
 
-        Assert.That(_page.Url, Does.Contain($"min-price={_searchRequest.MinimumPrice}"), "Page should contain min-price to be set to the value of the search request.");
-        Assert.That(_page.Url.Contains($"max-price={_searchRequest.MaximumPrice}"), "Page should contain max-price to be set to the value of the search request.");
+        var url = _searchController.Page.Url;
+
+        Assert.That(url, Does.Contain($"min-price={_searchRequest.MinimumPrice}"), "Page should contain min-price to be set to the value of the search request.");
+        Assert.That(url, Does.Contain($"max-price={_searchRequest.MaximumPrice}"), "Page should contain max-price to be set to the value of the search request.");
     }
 }

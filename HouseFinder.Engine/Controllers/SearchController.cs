@@ -11,6 +11,8 @@ public class SearchController : BaseController
     private readonly SearchRequest _searchRequest;
     private bool _cookiesDismissed;
 
+    public IPage Page => _page;
+
     public SearchResultPage ResultPage => new(_page);
 
     public SearchController(IPage page, SearchRequest searchRequest)
@@ -53,20 +55,23 @@ public class SearchController : BaseController
 
         await RetryPolicy.ExecuteAsync(async () =>
         {
-            if (await _page.IsVisibleAsync(minBedsLocator.Locator))
+            if (await minBedsLocator.IsVisibleAsync())
             {
                 return;
             }
 
             await ResultPage.MoreFiltersButton.ClickAsync();
 
-            if (!await _page.IsVisibleAsync(minBedsLocator.Locator))
+            if (!await minBedsLocator.IsVisibleAsync())
             {
                 throw new Exception("Min Beds selector not visible");
             }
         });
 
-        await _page.SelectOptionAsync(minBedsLocator.Locator, _searchRequest.NumberOfBedrooms.ToString());
+        await minBedsLocator.SelectOptionAsync(new SelectOptionValue
+        {
+            Value = _searchRequest.NumberOfBedrooms.ToString()
+        });
 
         await ResultPage.MoreFiltersDialog.ApplyButton.ClickAsync();
         await _page.WaitForLoadStateAsync(LoadState.NetworkIdle);

@@ -10,11 +10,13 @@ public class PropertyPage : OnTheMarketPage
 
     public string MainSectionLocator => ".main-col";
 
-    public ILocator HeadingLocator => Page.Locator($"{MainSectionLocator} {By.TagName("h1").Locator}");
+    public ILocator HeadingLocator => Page.Locator("[data-test=\"property-title\"]");
 
-    public ILocator SubHeadingLocator => Page.Locator($"{MainSectionLocator} .leading-none");
+    public ILocator SubHeadingLocator => HeadingLocator.Locator("..")
+                                            .Locator("//div[contains(@class, \"md:leading-normal\")]");
 
-    public ILocator PriceLocator => Page.Locator($"{MainSectionLocator} .price");
+    public ILocator PriceLocator => Page.Locator("[data-test=\"property-price\"]");
 
-    public ILocator TagLocator => Page.Locator($"{MainSectionLocator} .otm-LabelChip");
+    public ILocator TagLocator => Page.Locator(".qlVuSS")
+                                    .Locator(".items-center");
 }

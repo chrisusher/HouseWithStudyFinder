@@ -9,4 +9,6 @@ public class OnTheMarketDialog
     }
 
     protected IPage Page { get; }
+
+    protected ILocator Root => Page.Locator("#headlessui-portal-root");
 }

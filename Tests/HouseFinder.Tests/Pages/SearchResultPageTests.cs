@@ -13,7 +13,7 @@ public class SearchResultPageTests
     [OneTimeSetUp]
     public async Task ClassSetup()
     {
-        _url = "https://www.onthemarket.com/details/14816491/";
+        _url = "https://www.onthemarket.com/details/15205736/";
         _page = await BrowserManager.LaunchBrowserAsync(new BrowserConfig
         {
             Headless = false,
